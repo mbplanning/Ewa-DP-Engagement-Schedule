@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ewa Development Plan Public Engagement</title>
+  <link rel="stylesheet" href="css/timeline.css?v=4">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-brand">
+      <img class="logo" src="assets/ewa-dp-logo.png" alt="ʻEwa Development Plan">
+      <div class="header-text">
+        <div class="title-row">
+          <h1>Ewa Development Plan Public Engagement</h1>
+          <div class="header-tools">
+            <button type="button" id="save-board">Save</button>
+            <button type="button" id="undo-board" disabled>Reverse a step</button>
+          </div>
+        </div>
+        <p id="today-date" class="today-date"></p>
+        <p id="save-status" class="save-status" hidden></p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <p class="section-label">Main idea</p>
+    <div class="sequence" id="sequence"></div>
+
+    <p class="section-label">Event types</p>
+    <div class="legend" id="legend" aria-label="Filter by event type"></div>
+
+    <p class="section-label">Chapters</p>
+    <p class="chapter-hint">Chapters 1, 2, 3, and 8 are key. Chapter 3 is split into land use and economy.</p>
+    <div class="legend" id="chapters" aria-label="Filter by chapter"></div>
+
+    <p class="section-label">Schedule at a glance</p>
+    <div class="month-nav" aria-label="Month overview">
+      <div class="month-nav-track" id="month-nav-track"></div>
+    </div>
+
+    <p class="section-label">Engagement timeline</p>
+    <div class="timeline" id="timeline"></div>
+
+    <footer class="footnote" id="footnotes"></footer>
+  </main>
+
+  <script src="data/events.js?v=8"></script>
+  <script src="js/timeline.js?v=8"></script>
+</body>
+</html>
