@@ -110,7 +110,7 @@ body {
 .page {
   max-width: 52rem;
   margin: 0 auto;
-  padding: 1.15rem 1.25rem 3.5rem;
+  padding: 0.3rem 1.25rem 3.5rem;
 }
 
 .section-label {
@@ -177,7 +177,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.4rem;
 }
 
 .legend button {
@@ -237,6 +237,42 @@ body {
   border-bottom: 2px solid var(--peach);
 }
 
+.format-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.format-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mode-mark {
+  display: inline-block;
+  width: 0.72rem;
+  height: 0.72rem;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--navy);
+  background: var(--navy);
+  vertical-align: middle;
+}
+
+.mode-mark.mode-hybrid {
+  background: linear-gradient(to right, var(--navy) 50%, #fff 50%);
+}
+
+.mode-mark.mode-remote {
+  background: #fff;
+}
+
 .chip.chapter-chip {
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -250,24 +286,16 @@ body {
   overflow-x: auto;
   background: var(--white);
   border: 1px solid var(--line);
-  padding: 0.65rem 0.7rem 0.5rem;
-  margin: 0 0 1.35rem;
+  padding: 0.35rem 0.7rem 0.4rem;
+  margin: 0 0 0.35rem;
 }
 
 .month-nav-track {
   position: relative;
   display: flex;
+  align-items: flex-start;
   min-width: 46rem;
-  padding-top: 1.55rem;
-}
-
-.month-nav-line {
-  position: absolute;
-  left: 0.6rem;
-  right: 0.6rem;
-  top: 2.15rem;
-  height: 3px;
-  background: var(--navy);
+  padding-top: 0.4rem;
 }
 
 .month-col {
@@ -277,14 +305,38 @@ body {
   min-width: 2.1rem;
 }
 
+.month-stage-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1.75rem;
+  height: 3px;
+}
+
+.month-col[data-stage="stage-2"] .month-stage-bar {
+  background: #2b3990;
+}
+
+.month-col[data-stage="stage-3"] .month-stage-bar {
+  background: #5c68b5;
+}
+
+.month-col[data-stage="stage-4"] .month-stage-bar {
+  background: #8b94cc;
+}
+
+.month-col[data-stage="stage-5"] .month-stage-bar {
+  background: #b7bddc;
+}
+
 .month-col .month-label {
   display: block;
   font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--grey);
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
 }
 
 .month-col .month-dots {
@@ -296,6 +348,8 @@ body {
 }
 
 .month-dot {
+  position: relative;
+  z-index: 1;
   width: 0.72rem;
   height: 0.72rem;
   padding: 0;
@@ -306,6 +360,14 @@ body {
   cursor: pointer;
 }
 
+.month-dot.mode-hybrid {
+  background: linear-gradient(to right, currentColor 50%, #fff 50%);
+}
+
+.month-dot.mode-remote {
+  background: #fff;
+}
+
 .month-dot:focus {
   outline: 2px solid var(--peach);
   outline-offset: 2px;
@@ -313,20 +375,23 @@ body {
 
 .month-chaps {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.12rem;
-  margin-top: 0.28rem;
-  min-height: 0.9rem;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.06rem;
+  margin-top: 0.2rem;
+  min-height: 0.7rem;
 }
 
 .month-chap {
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   color: var(--navy);
   line-height: 1.15;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .month-chap.is-key {
@@ -342,7 +407,7 @@ body {
 .timeline::before {
   content: "";
   position: absolute;
-  top: 0.4rem;
+  top: 0.1rem;
   bottom: 0.4rem;
   left: 1.15rem;
   width: 3px;
@@ -354,10 +419,14 @@ body {
   margin: 0 0 1.15rem;
 }
 
+.stage-block:first-child {
+  margin-top: 0;
+}
+
 .stage-mark {
   position: relative;
-  min-height: 1.35rem;
-  margin: 0 0 0.65rem;
+  min-height: 0.9rem;
+  margin: 0 0 0.2rem;
   padding-left: 2.05rem;
 }
 
@@ -484,6 +553,19 @@ body {
   color: var(--grey) !important;
 }
 
+.event-card.is-done .mode-mark {
+  border-color: var(--grey);
+  background: var(--grey);
+}
+
+.event-card.is-done .mode-mark.mode-hybrid {
+  background: linear-gradient(to right, var(--grey) 50%, #fff 50%);
+}
+
+.event-card.is-done .mode-mark.mode-remote {
+  background: #fff;
+}
+
 .event-card.is-done .chip {
   border-color: var(--grey);
 }
@@ -518,9 +600,59 @@ body {
 }
 
 .event-card h3 {
-  margin: 0 0 0.4rem;
+  margin: 0;
   font-size: 1.08rem;
   color: var(--navy);
+}
+
+.event-heading {
+  display: block;
+  margin: 0 0 0.4rem;
+  line-height: 1.35;
+}
+
+.event-heading h3 {
+  display: inline;
+}
+
+.event-heading .mode-mark {
+  display: inline-block;
+  margin: 0 0.15rem 0.05rem;
+  vertical-align: middle;
+}
+
+.event-more-toggle {
+  display: inline-block;
+  margin: 0 0 0 0.15rem;
+  padding: 0 0.15rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--navy);
+  cursor: pointer;
+  vertical-align: baseline;
+}
+
+.event-more-toggle:focus {
+  outline: 2px solid var(--peach);
+  outline-offset: 1px;
+}
+
+.event-more-panel {
+  margin: 0.45rem 0 0;
+}
+
+.event-more-panel ul {
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  font-size: 0.86rem;
+}
+
+.event-more-panel li {
+  margin: 0 0 0.35rem;
 }
 
 .event-summary {
@@ -546,45 +678,20 @@ body {
   padding: 0.12rem 0.4rem;
 }
 
+.event-card.is-done .event-more-toggle {
+  color: var(--grey);
+}
+
 .chip.is-optional {
   color: var(--public);
   border-color: var(--public);
 }
 
-.event-more {
-  margin: 0.55rem 0 0;
-}
-
-.event-more summary {
-  cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--navy);
-  list-style: none;
-}
-
-.event-more summary::-webkit-details-marker {
-  display: none;
-}
-
-.event-more summary::after {
-  content: " +";
-}
-
-.event-more[open] summary::after {
-  content: " −";
-}
-
-.event-more ul {
-  margin: 0.45rem 0 0;
-  padding: 0 0 0 1.1rem;
-  font-size: 0.86rem;
-}
-
-.event-more li {
-  margin: 0 0 0.35rem;
+.event-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.5rem 0 0;
 }
 
 .footnote {

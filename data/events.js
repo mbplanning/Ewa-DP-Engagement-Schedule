@@ -1,6 +1,6 @@
 window.EWA_ENGAGEMENT = {
   title: "Ewa Development Plan Public Engagement",
-  dataVersion: 4,
+  dataVersion: 6,
   sequence: [
     {
       title: "Public Participation",
@@ -58,9 +58,15 @@ window.EWA_ENGAGEMENT = {
       icon: "exhibit"
     }
   ],
+  formats: [
+    { id: "in-person", label: "In person" },
+    { id: "hybrid", label: "Hybrid" },
+    { id: "remote", label: "Remote only" }
+  ],
   chapters: [
     {
       id: "ch1",
+      mark: "1",
       short: "Ch1",
       label: "Ch1 Intro",
       full: "Ch1 Intro",
@@ -68,6 +74,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch2",
+      mark: "2",
       short: "Ch2",
       label: "Ch2 Infrastructure",
       full: "Ch2 Infrastructure, Public Facilities, One Water",
@@ -75,6 +82,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch3-land",
+      mark: "3.L",
       short: "Ch3 Land use",
       label: "Ch3 Land use",
       full: "Ch3 Land Use, Future Conditions, and Community Character",
@@ -82,6 +90,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch3-econ",
+      mark: "3.E",
       short: "Ch3 Economy",
       label: "Ch3 Economy",
       full: "Ch3 Economic Development",
@@ -89,6 +98,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch4",
+      mark: "4",
       short: "Ch4",
       label: "Ch4 Hazards",
       full: "Ch4 Hazards, Resilience, and Sustainability",
@@ -96,6 +106,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch5",
+      mark: "5",
       short: "Ch5",
       label: "Ch5 Healthy Community",
       full: "Ch5 Healthy Community",
@@ -103,6 +114,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch6",
+      mark: "6",
       short: "Ch6",
       label: "Ch6 Cultural resources",
       full: "Ch6 Cultural & Historic Resources",
@@ -110,6 +122,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch7",
+      mark: "7",
       short: "Ch7",
       label: "Ch7 Parks",
       full: "Ch7 Public Parks, Beaches, Natural Open Space / Conservation Areas",
@@ -117,6 +130,7 @@ window.EWA_ENGAGEMENT = {
     },
     {
       id: "ch8",
+      mark: "8",
       short: "Ch8",
       label: "Ch8 Mobility",
       full: "Ch8 Mobility",
@@ -187,7 +201,8 @@ window.EWA_ENGAGEMENT = {
         "Possible locations later in the round include Ka Makana Aliʻi, Kapolei Commons, farmers markets, neighborhood events, Skyline stations, and community or street festivals.",
         "December is treated as a major outreach window because ʻEwa already has many established seasonal events."
       ],
-      attendance: ["A", "K"]
+      attendance: ["A", "K"],
+      format: "in-person"
     },
     {
       id: "cac-1",
@@ -206,7 +221,7 @@ window.EWA_ENGAGEMENT = {
         "DPP hosts and answers questions. Alta helps prepare materials and writes summary notes. Elected officials currently in office will not serve on the CAC."
       ],
       attendance: ["A", "K"],
-      format: "In person"
+      format: "in-person"
     },
     {
       id: "nb-1",
@@ -240,7 +255,8 @@ window.EWA_ENGAGEMENT = {
         "Possible activities: Love It / Change It boards, vision statements, Survey 1, a large aerial map with stickers for favorite places, missing amenities, unsafe intersections, congestion, flooding, and growth areas, a kids’ drawing station (“Draw your future ʻEwa”), a story-recording station, landmark boards, and sticker voting on top issues.",
         "Survey 1 covers issues, opportunities, and the vision statement. Alta prepares the survey; DPP disseminates it. QR codes go on printed materials. Analysis is wrapped into the pop-up summary. Surveys stay open about four weeks.",
         "Alta prepares materials. DPP staffs the events, monitors the online survey, and writes summary notes. Kids’ drawings may later appear at the gallery walk or symposium."
-      ]
+      ],
+      format: "in-person"
     },
     {
       id: "listen-1",
@@ -258,7 +274,8 @@ window.EWA_ENGAGEMENT = {
         "The activities overview describes these as in-person, topic-focused sessions. The listening-session section of the same August 2026 draft says all listening sessions are planned to be remote. That conflict is left visible until the team confirms format.",
         "Expected outcome: a clearer picture of community priorities and concerns before CAC Meeting 3 reviews Chapters 1–2."
       ],
-      attendance: ["K"]
+      attendance: ["K"],
+      format: "remote"
     },
     {
       id: "cac-2",
@@ -276,7 +293,7 @@ window.EWA_ENGAGEMENT = {
         "CAC Meetings 2 through 7 are hybrid. Meetings 1 and 8 are in person."
       ],
       attendance: ["K"],
-      format: "Hybrid"
+      format: "hybrid"
     },
     {
       id: "cac-3",
@@ -293,7 +310,7 @@ window.EWA_ENGAGEMENT = {
         "After major events, the consultant or facilitator who attended prepares a “What We Heard” summary: themes, consensus, differences, and how comments affected the next draft."
       ],
       attendance: ["K"],
-      format: "Hybrid"
+      format: "hybrid"
     },
     {
       id: "listen-2",
@@ -310,7 +327,8 @@ window.EWA_ENGAGEMENT = {
         "The consultant prepares a drafted outline to start the discussion. DPP invites applicable agency staff through the director’s office.",
         "Alta leads this chapter. Input from this session feeds the Chapter 3 draft that CAC Meeting 4 will review."
       ],
-      attendance: ["K"]
+      attendance: ["K"],
+      format: "remote"
     },
     {
       id: "listen-3",
@@ -326,7 +344,8 @@ window.EWA_ENGAGEMENT = {
         "Together with Session 2, this gives Chapter 3 enough room before a single CAC review of land use, growth, economy, and character.",
         "Same working method as other listening sessions: outline in advance, topic tables, agency staff invited, “What We Heard” afterward."
       ],
-      attendance: ["K"]
+      attendance: ["K"],
+      format: "remote"
     },
     {
       id: "cac-4",
@@ -343,7 +362,7 @@ window.EWA_ENGAGEMENT = {
         "Hybrid meeting. Keith facilitates. Alta prepares materials with DPP review."
       ],
       attendance: ["K"],
-      format: "Hybrid"
+      format: "hybrid"
     },
     {
       id: "popup-2",
@@ -359,7 +378,8 @@ window.EWA_ENGAGEMENT = {
         "Possible activities: mobility hot-spot mapping (congestion, dangerous intersections, missing sidewalks, bike facilities, transit destinations, priority spots); a five-token trade-off exercise (road capacity, bus, Skyline, walking, bikes, school travel, evacuation); a 2050 mobility vision board; and a daily-commute string map (home, destination, connecting string).",
         "Survey 2 is administered after the major chapter reviews and focuses on mobility. Alta prepares it; DPP disseminates. Findings go into the pop-up summary.",
         "Alta prepares materials. DPP attends and writes summary notes."
-      ]
+      ],
+      format: "in-person"
     },
     {
       id: "listen-4",
@@ -375,7 +395,8 @@ window.EWA_ENGAGEMENT = {
         "Chapter 8 has both a dedicated listening session and a dedicated CAC meeting so there is enough time for transportation in detail.",
         "The Excel chart flags this as “bring mobility to an earlier chapter.” In the sequence it sits after land use and before sustainability, health, culture, and parks."
       ],
-      attendance: ["K"]
+      attendance: ["K"],
+      format: "remote"
     },
     {
       id: "cac-5",
@@ -392,7 +413,7 @@ window.EWA_ENGAGEMENT = {
         "Hybrid meeting. Keith facilitates."
       ],
       attendance: ["K"],
-      format: "Hybrid"
+      format: "hybrid"
     },
     {
       id: "listen-5",
@@ -408,7 +429,8 @@ window.EWA_ENGAGEMENT = {
         "Related topics are grouped because the number of CAC meetings is limited.",
         "Same listen-then-draft-then-CAC sequence as the core chapters."
       ],
-      attendance: ["K"]
+      attendance: ["K"],
+      format: "remote"
     },
     {
       id: "cac-6",
@@ -424,7 +446,7 @@ window.EWA_ENGAGEMENT = {
         "Hybrid meeting. Keith facilitates. Alta prepares chapter materials with DPP review."
       ],
       attendance: ["K"],
-      format: "Hybrid"
+      format: "hybrid"
     },
     {
       id: "listen-6",
@@ -440,7 +462,8 @@ window.EWA_ENGAGEMENT = {
         "Chapters 6 and 7 are grouped because they share community identity, stewardship, and protection of cultural and environmental assets.",
         "This is the last listening session before the wrap-up stage."
       ],
-      attendance: ["K"]
+      attendance: ["K"],
+      format: "remote"
     },
     {
       id: "cac-7",
@@ -457,7 +480,7 @@ window.EWA_ENGAGEMENT = {
         "Hybrid meeting. Keith facilitates."
       ],
       attendance: ["K"],
-      format: "Hybrid"
+      format: "hybrid"
     },
     {
       id: "popup-3",
@@ -473,7 +496,8 @@ window.EWA_ENGAGEMENT = {
         "Possible activity: a “Did we miss anything?” board organized by chapter — community character and growth; infrastructure and One Water; economy and jobs; sustainability and resilience; cultural resources; parks and open space; healthy communities.",
         "Expected outcome: remaining concerns, unintended consequences, and gaps to fix before the public draft.",
         "Alta prepares materials. DPP attends and writes summary notes."
-      ]
+      ],
+      format: "in-person"
     },
     {
       id: "cac-8",
@@ -491,7 +515,7 @@ window.EWA_ENGAGEMENT = {
         "Keith facilitates. DPP hosts."
       ],
       attendance: ["A*"],
-      format: "In person",
+      format: "in-person",
       optional: true
     },
     {
@@ -528,7 +552,8 @@ window.EWA_ENGAGEMENT = {
         "Expected outcome: comments on draft policies and maps, and a clearer public path into the Public Review Draft."
       ],
       attendance: ["A*"],
-      optional: true
+      optional: true,
+      format: "hybrid"
     },
     {
       id: "symposium",
@@ -546,7 +571,8 @@ window.EWA_ENGAGEMENT = {
         "Expected outcome: better public understanding of the draft, more participation in formal review, and a record of remaining questions.",
         "The Gantt places this in March 2028 with Alta and Keith attending, after the gallery walk."
       ],
-      attendance: ["A", "K"]
+      attendance: ["A", "K"],
+      format: "in-person"
     }
   ]
 };

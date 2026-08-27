@@ -36,6 +36,7 @@
       if (!savedEvent.chapters || !savedEvent.chapters.length) {
         savedEvent.chapters = (src.chapters || []).slice();
       }
+      if (src.format) savedEvent.format = src.format;
     });
   }
 
@@ -165,6 +166,42 @@
     return `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ""}</svg>`;
   }
 
+  const FORMAT_LABEL = {
+    "in-person": "In person",
+    hybrid: "Hybrid",
+    remote: "Remote only"
+  };
+
+  function formatId(value) {
+    if (!value) return "";
+    const v = String(value).toLowerCase();
+    if (v === "in person" || v === "in-person") return "in-person";
+    if (v === "hybrid") return "hybrid";
+    if (v === "remote" || v === "remote only") return "remote";
+    return "";
+  }
+
+  function modeMark(value, extraClass) {
+    const id = formatId(value);
+    if (!id) return "";
+    const label = FORMAT_LABEL[id] || id;
+    return `<span class="mode-mark mode-${id}${extraClass ? " " + extraClass : ""}" title="${label}" aria-label="${label}"></span>`;
+  }
+
+  function monthStage(key) {
+    if (key <= "2026-11") return "stage-2";
+    if (key <= "2027-09") return "stage-3";
+    if (key <= "2028-01") return "stage-4";
+    return "stage-5";
+  }
+
+  function monthGlanceLabel(m, index) {
+    const monthNum = Number(m.key.slice(5));
+    const yy = String(m.year).slice(2);
+    if (index === 0 || monthNum === 1) return `${yy}/${monthNum}`;
+    return String(monthNum);
+  }
+
   function chipLabel(code) {
     const labels = {
       A: "Alta",
@@ -179,8 +216,14 @@
   }
 
   function eventMatchesChapter(ev, chapterId) {
-    if (chapterId === "all") return true;
+    if (chapterId === "all" || chapterId === "none") return true;
     return (ev.chapters || []).includes(chapterId);
+  }
+
+  function setChapterFilter(id) {
+    if (id === "all-cover") id = "all";
+    activeChapter = id === activeChapter ? "none" : id;
+    applyFilter();
   }
 
   function eventMatchesFilters(ev) {
@@ -239,6 +282,22 @@
       .join("");
   }
 
+  function renderFormats() {
+    const box = document.getElementById("formats");
+    if (!box) return;
+    const items = data.formats || [
+      { id: "in-person", label: "In person" },
+      { id: "hybrid", label: "Hybrid" },
+      { id: "remote", label: "Remote only" }
+    ];
+    box.innerHTML = items
+      .map(
+        (f) =>
+          `<span class="format-key"><span class="mode-mark mode-${f.id}" aria-hidden="true"></span>${f.label}</span>`
+      )
+      .join("");
+  }
+
   function renderChapters() {
     const box = document.getElementById("chapters");
     const buttons = [
@@ -255,50 +314,53 @@
 
   function renderMonthNav() {
     const track = document.getElementById("month-nav-track");
-    track.innerHTML =
-      '<div class="month-nav-line"></div>' +
-      months
-        .map((m) => {
-          const events = (board.events || []).filter((ev) => eventTouchesMonth(ev, m.key));
-          const dots = events
-            .map((ev) => {
-              const t = typeById[ev.type];
-              if (!t) return "";
-              const chNames = eventChapters(ev).map((ch) => ch.short).join(", ");
-              const label = chNames ? `${ev.title} (${chNames})` : ev.title;
-              return `<button class="month-dot" data-jump="${ev.id}" data-type="${ev.type}" data-chapters="${(ev.chapters || []).join(",")}" title="${label}" style="color:${t.color}" aria-label="${label}, ${ev.dateLabel}"></button>`;
-            })
-            .join("");
-          const chapterSet = [];
-          events.forEach((ev) => {
-            const list = eventChapters(ev);
-            if (list.length >= 8) {
-              if (!chapterSet.some((item) => item.id === "all-cover")) {
-                chapterSet.push({
-                  id: "all-cover",
-                  short: "All",
-                  full: "All chapters",
-                  key: false
-                });
-              }
-              return;
+    track.innerHTML = months
+      .map((m, index) => {
+        const events = (board.events || []).filter((ev) => eventTouchesMonth(ev, m.key));
+        const dots = events
+          .map((ev) => {
+            const t = typeById[ev.type];
+            if (!t) return "";
+            const mode = formatId(ev.format);
+            const modeClass = mode ? ` mode-${mode}` : "";
+            const chNames = eventChapters(ev).map((ch) => ch.short).join(", ");
+            const modeName = mode ? FORMAT_LABEL[mode] : "";
+            const label = [ev.title, chNames && `(${chNames})`, modeName && `· ${modeName}`]
+              .filter(Boolean)
+              .join(" ");
+            return `<button class="month-dot${modeClass}" data-jump="${ev.id}" data-type="${ev.type}" data-chapters="${(ev.chapters || []).join(",")}" title="${label}" style="color:${t.color}" aria-label="${label}, ${ev.dateLabel}"></button>`;
+          })
+          .join("");
+        const chapterSet = [];
+        events.forEach((ev) => {
+          const list = eventChapters(ev);
+          if (list.length >= 8) {
+            if (!chapterSet.some((item) => item.id === "all-cover")) {
+              chapterSet.push({
+                id: "all-cover",
+                mark: "All",
+                short: "All",
+                full: "All chapters",
+                key: false
+              });
             }
-            list.forEach((ch) => {
-              if (!chapterSet.some((item) => item.id === ch.id)) chapterSet.push(ch);
-            });
+            return;
+          }
+          list.forEach((ch) => {
+            if (!chapterSet.some((item) => item.id === ch.id)) chapterSet.push(ch);
           });
-          const chapLabels = chapterSet
-            .map((ch) => `<span class="month-chap${ch.key ? " is-key" : ""}" data-chapter="${ch.id}" title="${ch.full}">${ch.short}</span>`)
-            .join("");
-          const showYear = m.label === "Jan" || m.key === "2026-08";
-          const yearMark = showYear ? ` ’${String(m.year).slice(2)}` : "";
-          return `<div class="month-col" data-month="${m.key}">
-            <span class="month-label">${m.label}${yearMark}</span>
+        });
+        const chapLabels = chapterSet
+          .map((ch) => `<span class="month-chap${ch.key ? " is-key" : ""}" data-chapter="${ch.id}" title="${ch.full}">${ch.mark || ch.short}</span>`)
+          .join("");
+        return `<div class="month-col" data-month="${m.key}" data-stage="${monthStage(m.key)}">
+            <span class="month-label">${monthGlanceLabel(m, index)}</span>
+            <span class="month-stage-bar" aria-hidden="true"></span>
             <span class="month-dots">${dots}</span>
             <span class="month-chaps">${chapLabels}</span>
           </div>`;
-        })
-        .join("");
+      })
+      .join("");
   }
 
   function eventTouchesMonth(ev, key) {
@@ -319,18 +381,17 @@
             const t = typeById[ev.type];
             if (!t) return "";
             const chips = [];
-            if (ev.format) chips.push(`<span class="chip">${ev.format}</span>`);
             (ev.attendance || []).forEach((code) => {
               const optional = code.includes("*") || ev.optional;
               chips.push(
                 `<span class="chip${optional ? " is-optional" : ""}">${chipLabel(code)}</span>`
               );
             });
-            const more = ev.details
-              ? `<details class="event-more">
-                  <summary>More from the strategy</summary>
-                  <ul>${ev.details.map((d) => `<li>${d}</li>`).join("")}</ul>
-                </details>`
+            const moreToggle = ev.details
+              ? `<button type="button" class="event-more-toggle" aria-expanded="false" aria-controls="more-${ev.id}" title="More from the strategy">+</button>`
+              : "";
+            const morePanel = ev.details
+              ? `<div class="event-more-panel" id="more-${ev.id}" hidden><ul>${ev.details.map((d) => `<li>${d}</li>`).join("")}</ul></div>`
               : "";
             const done = ev.completed ? " is-done" : "";
             const editable = ev.completed ? "false" : "true";
@@ -347,10 +408,12 @@
                   <span class="event-date">${ev.dateLabel}</span>
                   <span class="event-type" style="color:${t.color}">${t.label}</span>
                 </div>
-                <h3 contenteditable="${editable}" spellcheck="false" data-event-id="${ev.id}" data-field="title">${ev.title}</h3>
+                <div class="event-heading">
+                <h3 contenteditable="${editable}" spellcheck="false" data-event-id="${ev.id}" data-field="title">${ev.title}</h3>${moreToggle}${modeMark(ev.format)}
+                </div>
                 <p class="event-summary" contenteditable="${editable}" spellcheck="false" data-event-id="${ev.id}" data-field="summary">${ev.summary}</p>
+                ${morePanel}
                 ${allChips.length ? `<div class="event-chips">${allChips.join("")}</div>` : ""}
-                ${more}
                 </div>
               </article>
             </li>`;
@@ -385,7 +448,7 @@
       const id = btn.getAttribute("data-chapter");
       const on = id === activeChapter;
       btn.classList.toggle("is-on", on);
-      btn.classList.toggle("is-dim", activeChapter !== "all" && !on);
+      btn.classList.toggle("is-dim", activeChapter !== "all" && activeChapter !== "none" && !on);
       btn.setAttribute("aria-pressed", String(on));
     });
     document.querySelectorAll(".event-item").forEach((item) => {
@@ -405,10 +468,15 @@
     document.querySelectorAll(".month-chap").forEach((tag) => {
       const chap = tag.getAttribute("data-chapter");
       const show =
-        activeChapter === "all" ||
-        chap === activeChapter ||
-        chap === "all-cover";
+        activeChapter !== "none" &&
+        (activeChapter === "all" || chap === activeChapter || chap === "all-cover");
       tag.classList.toggle("is-hidden", !show);
+    });
+    document.querySelectorAll(".month-chaps").forEach((box) => {
+      box.classList.toggle("is-hidden", activeChapter === "none");
+    });
+    document.querySelectorAll(".chapter-chip").forEach((chip) => {
+      chip.classList.toggle("is-hidden", activeChapter === "none");
     });
   }
 
@@ -449,15 +517,12 @@
     document.getElementById("chapters").addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-chapter]");
       if (!btn) return;
-      activeChapter = btn.getAttribute("data-chapter");
-      applyFilter();
+      setChapterFilter(btn.getAttribute("data-chapter"));
     });
     document.getElementById("month-nav-track").addEventListener("click", (e) => {
       const chap = e.target.closest(".month-chap[data-chapter]");
       if (chap) {
-        const id = chap.getAttribute("data-chapter");
-        activeChapter = id === "all-cover" ? "all" : id;
-        applyFilter();
+        setChapterFilter(chap.getAttribute("data-chapter"));
         return;
       }
       const dot = e.target.closest("[data-jump]");
@@ -465,10 +530,20 @@
       jumpTo(dot.getAttribute("data-jump"));
     });
     document.getElementById("timeline").addEventListener("click", (e) => {
+      const toggle = e.target.closest(".event-more-toggle");
+      if (toggle) {
+        e.preventDefault();
+        e.stopPropagation();
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        const panel = document.getElementById(toggle.getAttribute("aria-controls"));
+        toggle.setAttribute("aria-expanded", String(!open));
+        toggle.textContent = open ? "+" : "−";
+        if (panel) panel.hidden = open;
+        return;
+      }
       const chapChip = e.target.closest(".chapter-chip[data-chapter]");
       if (chapChip) {
-        activeChapter = chapChip.getAttribute("data-chapter");
-        applyFilter();
+        setChapterFilter(chapChip.getAttribute("data-chapter"));
         return;
       }
       const btn = e.target.closest(".event-check");
@@ -506,6 +581,7 @@
     renderHeader();
     renderIntro();
     renderLegend();
+    renderFormats();
     renderChapters();
     renderMonthNav();
     renderTimeline();
